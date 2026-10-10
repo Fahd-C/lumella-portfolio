@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lumella | UGC videos for beauty brands</title>
-<meta name="description" content="Lumella is a UGC studio in Beirut. Real people, real voices, vertical product videos for beauty brands, captioned and ready for TikTok, Reels and paid social.">
+<meta name="description" content="Lumella is a UGC studio in Beirut. Clean product-only videos and real people trying your product, made vertical for beauty brands and ready for TikTok, Reels and paid social.">
 <meta name="theme-color" content="#F5F7F4">
 <link rel="canonical" href="https://lumellagroup.org/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Lumella | UGC videos for beauty brands">
-<meta property="og:description" content="Beauty videos that look like a real routine, not an ad. Made in Beirut for brands everywhere.">
+<meta property="og:description" content="Beauty videos that look like a real routine, not an ad. Product-only and real-reaction UGC, made in Beirut for brands everywhere.">
 <meta property="og:url" content="https://lumellagroup.org/">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23FF5C93'/%3E%3Cpath d='M23 14v30h20' fill='none' stroke='%232B0D1B' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
@@ -126,6 +126,12 @@
     background:var(--on);color:var(--tint);
   }
   .reel__play svg{width:42%;height:42%;margin-left:6%;}
+  .reel__tag{
+    position:absolute;z-index:2;left:12px;top:24px;
+    padding:3px 10px;border-radius:999px;
+    font-size:.74rem;font-weight:600;line-height:1.45;
+    background:rgba(245,247,244,.94);color:var(--ink);
+  }
   .reel__lines{position:absolute;z-index:1;left:14px;bottom:16px;right:40%;display:grid;gap:7px;}
   .reel__lines i{display:block;height:7px;border-radius:7px;background:color-mix(in srgb,var(--on) 30%,transparent);}
   .reel__lines i:last-child{width:58%;}
@@ -191,6 +197,9 @@
   /* What we make */
   .make{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,6vw,96px);align-items:start;}
   .make .section__head{margin:0;}
+  .styles{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:36px;}
+  .style{background:rgba(245,247,244,.09);border-radius:18px;padding:24px;display:grid;gap:10px;align-content:start;}
+  .style p{color:rgba(245,247,244,.82);}
   .types{margin:0;padding:0;list-style:none;border-bottom:1px solid rgba(245,247,244,.24);}
   .types li{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:8px 32px;padding:28px 0;border-top:1px solid rgba(245,247,244,.24);}
   .types h3{font-stretch:75%;font-size:1.9rem;}
@@ -255,6 +264,7 @@
     .nav a:not(.btn){display:none;}
     .steps{grid-template-columns:1fr;}
     .types li{grid-template-columns:1fr;}
+    .styles{grid-template-columns:1fr;}
     .specs{flex-direction:column;}
     .site-footer .wrap{flex-direction:column;align-items:flex-start;}
   }
@@ -281,7 +291,7 @@
     <div class="wrap">
       <div class="hero__copy">
         <h1>Beauty videos that look like a real routine, not an ad.</h1>
-        <p class="lead">Lumella is a UGC studio in Beirut. We make vertical product videos for beauty brands: real people, real voices, captioned and ready for TikTok, Reels and paid social.</p>
+        <p class="lead">Lumella is a UGC studio in Beirut. We make two kinds of vertical video for beauty brands: clean product-only shots, and real people trying your product and saying what they think. Captioned and ready for TikTok, Reels and paid social.</p>
         <div class="hero__actions">
           <a class="btn btn--solid" href="#work">See sample work</a>
           <a class="btn btn--line" href="mailto:hello@lumellagroup.org?subject=Project%20enquiry">hello@lumellagroup.org</a>
@@ -315,15 +325,13 @@
     <div class="wrap">
       <div class="section__head">
         <h2>Sample work</h2>
-        <p class="lead muted">Six sample videos covering the four formats we make. Tap a format to filter. Clips are being filmed now and will appear here as they are finished.</p>
+        <p class="lead muted">Six samples across our two styles. Use the buttons to filter. Clips are being filmed now and will appear here as they are finished.</p>
       </div>
 
-      <div class="filters" role="group" aria-label="Filter by video type">
+      <div class="filters" role="group" aria-label="Filter by video style">
         <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
-        <button class="chip" type="button" data-filter="unboxing" aria-pressed="false">Unboxing</button>
-        <button class="chip" type="button" data-filter="routine" aria-pressed="false">Routine</button>
-        <button class="chip" type="button" data-filter="texture" aria-pressed="false">Texture</button>
-        <button class="chip" type="button" data-filter="ingredient" aria-pressed="false">Ingredient</button>
+        <button class="chip" type="button" data-filter="product" aria-pressed="false">Product only</button>
+        <button class="chip" type="button" data-filter="people" aria-pressed="false">Real reactions</button>
       </div>
 
       <div class="wall">
@@ -331,52 +339,52 @@
           Each card is one sample video. To replace a placeholder, fill in data-src (and optionally data-poster).
           Change the caption text inside <figcaption> to match the real video.
         -->
-        <figure class="card" data-type="routine">
-          <div class="reel" data-src="" data-poster="" data-label="Cleanser, routine integration" style="--tint:var(--jade-tint);--on:var(--ink)">
-            <span class="reel__bar"></span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
+        <figure class="card" data-type="people">
+          <div class="reel" data-src="" data-poster="" data-label="Cleanser, real reaction, routine integration" style="--tint:var(--jade-tint);--on:var(--ink)">
+            <span class="reel__bar"></span><span class="reel__tag">Real reactions</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
             <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
           </div>
           <figcaption><strong>Cleanser</strong><span>Routine integration</span></figcaption>
         </figure>
 
-        <figure class="card" data-type="ingredient">
-          <div class="reel" data-src="" data-poster="" data-label="Serum, ingredient callout" style="--tint:var(--blush);--on:var(--ink)">
-            <span class="reel__bar"></span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
+        <figure class="card" data-type="product">
+          <div class="reel" data-src="" data-poster="" data-label="Serum, product only, ingredient callout" style="--tint:var(--blush);--on:var(--ink)">
+            <span class="reel__bar"></span><span class="reel__tag">Product only</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
             <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
           </div>
           <figcaption><strong>Serum</strong><span>Ingredient callout</span></figcaption>
         </figure>
 
-        <figure class="card" data-type="routine">
-          <div class="reel" data-src="" data-poster="" data-label="Moisturizer, two-step routine" style="--tint:var(--jade);--on:var(--pearl)">
-            <span class="reel__bar"></span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
+        <figure class="card" data-type="people">
+          <div class="reel" data-src="" data-poster="" data-label="Moisturizer, real reaction, first impressions" style="--tint:var(--jade);--on:var(--pearl)">
+            <span class="reel__bar"></span><span class="reel__tag">Real reactions</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
             <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
           </div>
-          <figcaption><strong>Moisturizer</strong><span>Two-step routine</span></figcaption>
+          <figcaption><strong>Moisturizer</strong><span>First impressions</span></figcaption>
         </figure>
 
-        <figure class="card" data-type="texture">
-          <div class="reel" data-src="" data-poster="" data-label="Lip gloss, texture and application" style="--tint:var(--gloss);--on:var(--ink)">
-            <span class="reel__bar"></span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
+        <figure class="card" data-type="product">
+          <div class="reel" data-src="" data-poster="" data-label="Lip gloss, product only, texture close-up" style="--tint:var(--gloss);--on:var(--ink)">
+            <span class="reel__bar"></span><span class="reel__tag">Product only</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
             <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
           </div>
-          <figcaption><strong>Lip gloss</strong><span>Texture and application</span></figcaption>
+          <figcaption><strong>Lip gloss</strong><span>Texture close-up</span></figcaption>
         </figure>
 
-        <figure class="card" data-type="unboxing">
-          <div class="reel" data-src="" data-poster="" data-label="Mascara, unboxing" style="--tint:#EDEFE9;--on:var(--ink)">
-            <span class="reel__bar"></span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
+        <figure class="card" data-type="people">
+          <div class="reel" data-src="" data-poster="" data-label="Mascara, real reaction, unboxing" style="--tint:#EDEFE9;--on:var(--ink)">
+            <span class="reel__bar"></span><span class="reel__tag">Real reactions</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
             <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
           </div>
-          <figcaption><strong>Mascara</strong><span>Unboxing</span></figcaption>
+          <figcaption><strong>Mascara</strong><span>Unboxing and reaction</span></figcaption>
         </figure>
 
-        <figure class="card" data-type="routine">
-          <div class="reel" data-src="" data-poster="" data-label="Gua sha, routine integration" style="--tint:var(--jade-tint);--on:var(--ink)">
-            <span class="reel__bar"></span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
+        <figure class="card" data-type="product">
+          <div class="reel" data-src="" data-poster="" data-label="Gua sha, product only, showcase" style="--tint:var(--jade-tint);--on:var(--ink)">
+            <span class="reel__bar"></span><span class="reel__tag">Product only</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
             <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
           </div>
-          <figcaption><strong>Gua sha</strong><span>Routine integration</span></figcaption>
+          <figcaption><strong>Gua sha</strong><span>Product showcase</span></figcaption>
         </figure>
       </div>
 
@@ -388,7 +396,18 @@
     <div class="wrap make">
       <div class="section__head">
         <h2>What we make</h2>
-        <p class="lead muted">Four formats that cover the way people actually decide to buy beauty products.</p>
+        <p class="lead muted">Two styles of video, in four formats that cover the way people actually decide to buy beauty products.</p>
+      </div>
+      <div class="make__body">
+      <div class="styles">
+        <div class="style">
+          <h3>Product only</h3>
+          <p>No people on screen. Macro textures, ingredient callouts and motion graphics built from real footage of your product, edited with AI-assisted tools. Captions or a real voiceover carry the story.</p>
+        </div>
+        <div class="style">
+          <h3>Real reactions</h3>
+          <p>A real person tries your product on camera and says what they think in their own words, briefed to stay inside your claims guidelines.</p>
+        </div>
       </div>
       <ul class="types">
         <li>
@@ -408,6 +427,7 @@
           <p>A short, clear walk through what is inside and what it is for, worded to stay within your claims guidelines.</p>
         </li>
       </ul>
+      </div>
     </div>
   </section>
 
@@ -420,7 +440,7 @@
       <ol class="steps">
         <li>
           <h3>Brief</h3>
-          <p>You tell us the product, the platform, the goal and your claims dos and don'ts.</p>
+          <p>You tell us the product, the platform, the style you want and your claims dos and don'ts.</p>
         </li>
         <li>
           <h3>Plan</h3>
@@ -428,7 +448,7 @@
         </li>
         <li>
           <h3>Film</h3>
-          <p>We cast from our own network and shoot vertically in real settings.</p>
+          <p>We shoot your product up close and, for real reactions, cast from our own network.</p>
         </li>
         <li>
           <h3>Edit and deliver</h3>
@@ -446,7 +466,7 @@
       <div class="principles">
         <div class="principle">
           <h3>Real people, real voices</h3>
-          <p>Every face and voice in our videos belongs to a real person. We use AI tools for editing and captions only, never to create people or voices.</p>
+          <p>Every person you see or hear in our videos is real. We use AI tools for editing, captions and motion graphics, never to create people, voices or product results.</p>
         </div>
         <div class="principle">
           <h3>Claims-safe by default</h3>
@@ -473,7 +493,7 @@
         </details>
         <details>
           <summary>Do you use AI-generated people or voices?</summary>
-          <p>No. The people and voices in our videos are real. We only use AI tools for editing tasks such as captions.</p>
+          <p>No. Every person and voice in our videos is real. We use AI tools to help with editing, captions and motion graphics, and never to show a product doing something it does not do.</p>
         </details>
         <details>
           <summary>What formats and lengths do you deliver?</summary>
