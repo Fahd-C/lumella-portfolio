@@ -15,18 +15,27 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23FF5C93'/%3E%3Cpath d='M23 14v30h20' fill='none' stroke='%232B0D1B' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&display=swap" rel="stylesheet">
+<script>
+  /* Motion flag: hides the hero for a moment so the entrance can play. Removed automatically after 3.5 s if the animation library cannot load. */
+  (function(){var d=document.documentElement;d.classList.add('js');
+    if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){
+      d.classList.add('m-pending');setTimeout(function(){d.classList.remove('m-pending');},3500);}})();
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization","name":"Lumella","url":"https://lumellagroup.org","email":"hello@lumellagroup.org","address":{"@type":"PostalAddress","addressLocality":"Beirut","addressCountry":"LB"}}
 </script>
 
 <!--
   HOW TO ADD A REAL VIDEO
-  1. Put the video file (MP4, vertical 9:16, under 25 MB) in a folder called "videos" next to this file.
-  2. Find the placeholder you want to replace (search for data-src) and fill it in:
-       data-src="videos/cleanser.mp4"
-       data-poster="videos/cleanser.jpg"   (optional cover image)
-  3. Re-upload index.html and the videos folder to GitHub.
+  1. Put the video file (MP4, vertical 9:16, under 25 MB) next to this file in the GitHub repo.
+  2. Find the placeholder you want to replace (search for data-src) and fill it in with the exact file names:
+       data-src="cleanser.mp4"
+       data-poster="cleanser.jpg"   (optional cover image)
+  3. Upload the video, the cover image and the updated index.html to GitHub.
   Nothing else changes. The play icon and skeleton lines disappear by themselves.
 -->
 
@@ -46,7 +55,7 @@
     color-scheme:light;
   }
   *,*::before,*::after{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion:no-preference){html:not(.motion-ok){scroll-behavior:smooth;}}
   body{
     margin:0;
     background:var(--pearl);
@@ -83,8 +92,9 @@
     min-height:48px;padding:0 24px;border-radius:999px;
     font:inherit;font-weight:600;text-decoration:none;cursor:pointer;
     border:2px solid var(--ink);
-    transition:background-color .2s,color .2s;
+    transition:background-color .2s,color .2s,transform .25s cubic-bezier(.2,.7,.2,1);
   }
+  .btn:hover{transform:translateY(-2px);}
   .btn--solid{background:var(--ink);color:var(--pearl);}
   .btn--solid:hover{background:var(--gloss);color:var(--ink);}
   .btn--line{background:transparent;color:var(--ink);}
@@ -118,7 +128,13 @@
     position:absolute;z-index:1;left:12px;right:12px;top:12px;height:3px;border-radius:3px;
     background:color-mix(in srgb,var(--on) 22%,transparent);
   }
-  .reel__bar::after{content:"";position:absolute;inset:0 62% 0 0;border-radius:3px;background:var(--on);}
+  .reel__bar::after{content:"";position:absolute;inset:0;border-radius:3px;background:var(--on);transform-origin:left;transform:scaleX(.38);}
+  @media (prefers-reduced-motion:no-preference){
+    .reel__bar::after{animation:story 7s linear infinite;}
+    .card:nth-child(odd) .reel__bar::after,.hero__reels .reel:nth-child(2) .reel__bar::after{animation-delay:-3.2s;}
+    .hero__reels .reel:nth-child(3) .reel__bar::after{animation-delay:-5s;}
+    @keyframes story{from{transform:scaleX(0);}to{transform:scaleX(1);}}
+  }
   .reel__play{
     position:absolute;z-index:1;left:50%;top:50%;translate:-50% -50%;
     width:clamp(44px,28%,64px);aspect-ratio:1;border-radius:50%;
@@ -161,16 +177,14 @@
   .hero__reels{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.6vw,18px);align-items:start;padding-bottom:64px;}
   .hero__reels .reel:nth-child(2){margin-top:64px;}
   .hero__reels .reel:nth-child(3){margin-top:20px;}
-  @media (prefers-reduced-motion:no-preference){
-    .hero__reels .reel{animation:rise .9s cubic-bezier(.2,.7,.2,1) both;}
-    .hero__reels .reel:nth-child(2){animation-delay:.12s;}
-    .hero__reels .reel:nth-child(3){animation-delay:.24s;}
-    @keyframes rise{from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:none;}}
-  }
+  html.m-pending .hero__copy > *,html.m-pending .hero__reels .reel{opacity:0;}
+  .w{display:inline-block;overflow:clip;vertical-align:top;padding-block:.06em .16em;margin-block:-.06em -.16em;}
+  .wi{display:inline-block;will-change:transform;}
 
   /* Sections */
   .section{padding-block:clamp(64px,9vw,120px);scroll-margin-top:12px;}
   .section__head{display:grid;gap:16px;margin-bottom:clamp(32px,5vw,56px);max-width:44rem;}
+  .work-head{width:min(100% - 2*var(--gutter),var(--wrap));margin-inline:auto;}
   .section--mist{background:var(--mist);}
   .section--jade{background:var(--jade);color:var(--pearl);}
   .section--jade .muted{color:rgba(245,247,244,.74);}
@@ -185,17 +199,47 @@
   }
   .chip:hover{background:var(--blush);}
   .chip[aria-pressed="true"]{background:var(--ink);color:var(--pearl);}
-  .wall{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 14px;}
-  @media (min-width:640px){.wall{grid-template-columns:repeat(3,1fr);gap:28px 18px;}}
-  @media (min-width:1000px){.wall{grid-template-columns:repeat(6,1fr);}}
+  /* Phones and tablets: swipe strip. Large screens: grid, or a pinned scroll strip when motion is on. */
+  .wall{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:var(--gutter);padding:8px var(--gutter) 6px;scrollbar-width:none;}
+  .wall::-webkit-scrollbar{display:none;}
+  .wall .card{flex:0 0 min(62vw,260px);scroll-snap-align:start;}
+  .strip-progress{display:block;height:3px;border-radius:3px;background:var(--line);width:min(100%,320px);margin:0 0 18px;overflow:hidden;}
+  .strip-progress i{display:block;height:100%;background:var(--ink);transform-origin:left;transform:scaleX(var(--p,.4));}
+  .work-foot{margin-top:28px;}
+  .work-foot .wall-note{margin-top:0;}
+  @media (min-width:1000px){
+    .wall{display:grid;grid-template-columns:repeat(6,1fr);gap:28px 18px;overflow:visible;scroll-snap-type:none;width:min(100% - 2*var(--gutter),var(--wrap));margin-inline:auto;padding:0;}
+    .wall .card{flex:none;}
+    .strip-progress{display:none;}
+    .work-foot{margin-top:36px;}
+  }
   .card{margin:0;display:grid;gap:12px;align-content:start;}
+  @media (hover:hover){
+    .card .reel{transition:transform .4s cubic-bezier(.2,.7,.2,1);}
+    .card:hover .reel{transform:translateY(-6px);}
+  }
   .card[hidden]{display:none;}
   .card figcaption{display:grid;gap:2px;line-height:1.3;}
   .card figcaption strong{font-weight:700;}
   .card figcaption span{color:var(--muted);font-size:.95rem;}
   .card figcaption .style-line{display:none;font-style:normal;font-size:.82rem;font-weight:600;color:var(--jade);}
   .card.has-video-card figcaption .style-line{display:block;}
-  .wall-note{margin-top:36px;max-width:36em;}
+  .wall-note{max-width:36em;}
+  .work-foot{width:min(100% - 2*var(--gutter),var(--wrap));margin-inline:auto;}
+
+  /* Pinned scroll strip (set by script on large screens when motion is allowed) */
+  html.pin-strip{--cardw:clamp(150px,calc((100svh - 420px) * 9 / 16),300px);}
+  html.pin-strip #work{min-height:100svh;display:flex;flex-direction:column;justify-content:center;gap:clamp(14px,2.6svh,28px);padding-block:clamp(20px,3.5svh,44px);}
+  html.pin-strip .work-head{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;}
+  html.pin-strip .work-head .section__head{margin:0;gap:8px;}
+  html.pin-strip .work-head .lead{font-size:1rem;max-width:32em;}
+  html.pin-strip .filters{margin:0;flex:none;}
+  html.pin-strip .strip-viewport{overflow:clip;}
+  html.pin-strip .wall{display:flex;width:max-content;gap:clamp(16px,2vw,28px);padding:8px max(var(--gutter),calc((100% - var(--wrap))/2));margin:0;overflow:visible;will-change:transform;}
+  html.pin-strip .wall .card{flex:none;width:var(--cardw);}
+  html.pin-strip .strip-progress{display:block;margin:0;flex:none;width:min(32vw,320px);}
+  html.pin-strip .work-foot{margin:0 auto;display:flex;align-items:center;gap:32px;}
+  html.pin-strip .wall-note{font-size:.82rem;line-height:1.4;max-width:46em;}
 
   /* What we make */
   .make{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,6vw,96px);align-items:start;}
@@ -205,12 +249,18 @@
   .style p{color:rgba(245,247,244,.82);}
   .types{margin:0;padding:0;list-style:none;border-bottom:1px solid rgba(245,247,244,.24);}
   .types li{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:8px 32px;padding:28px 0;border-top:1px solid rgba(245,247,244,.24);}
-  .types h3{font-stretch:75%;font-size:1.9rem;}
+  .types h3{font-stretch:75%;font-size:1.9rem;transition:transform .35s cubic-bezier(.2,.7,.2,1),color .25s;}
+  @media (hover:hover){.types li:hover h3{transform:translateX(10px);color:var(--blush);}}
   .types p{color:rgba(245,247,244,.8);}
 
   /* Process */
   .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3vw,40px);margin:0;padding:0;list-style:none;counter-reset:step;}
-  .steps li{counter-increment:step;border-top:2px solid var(--ink);padding-top:18px;display:grid;gap:10px;align-content:start;}
+  .steps li{
+    --draw:1;counter-increment:step;padding-top:18px;display:grid;gap:10px;align-content:start;
+    border-top:2px solid rgba(43,13,27,.12);
+    background:linear-gradient(var(--ink),var(--ink)) 0 0/calc(var(--draw) * 100%) 2px no-repeat;
+    background-origin:border-box;
+  }
   .steps li::before{
     content:counter(step);
     font-stretch:75%;font-weight:800;font-size:3.2rem;line-height:1;color:var(--jade);
@@ -239,7 +289,8 @@
       linear-gradient(var(--ink),var(--ink)) center/2px 100% no-repeat;
     transition:transform .25s;
   }
-  details[open] summary::after{transform:rotate(45deg);}
+  details[open]:not(.is-closing) summary::after{transform:rotate(45deg);}
+  details p{overflow:hidden;}
   details p{padding:0 0 24px;color:var(--muted);max-width:38em;}
 
   /* Contact */
@@ -255,6 +306,19 @@
   .site-footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between;align-items:center;}
   .site-footer .wordmark{color:var(--pearl);font-size:1.5rem;}
   .site-footer a{color:var(--pearl);}
+
+  /* Marquee band */
+  .marquee{background:var(--ink);color:var(--pearl);overflow:hidden;padding-block:clamp(14px,2vw,22px);}
+  .marquee__track{display:flex;width:max-content;animation:marquee 42s linear infinite;}
+  .marquee__group{display:flex;flex:none;align-items:center;}
+  .marquee__group span{display:flex;align-items:center;gap:clamp(18px,2.4vw,34px);padding-right:clamp(18px,2.4vw,34px);font-stretch:75%;font-weight:800;font-size:clamp(1.5rem,3.2vw,2.4rem);letter-spacing:-.01em;line-height:1;white-space:nowrap;}
+  .marquee__group span::after{content:"";width:.42em;height:.42em;border-radius:50%;background:var(--gloss);flex:none;}
+  @keyframes marquee{to{transform:translateX(-50%);}}
+  @media (prefers-reduced-motion:reduce){.marquee{display:none;}}
+
+  /* Scroll progress (shown only when motion is on) */
+  .scroll-progress{display:none;position:fixed;left:0;top:0;z-index:50;width:100%;height:3px;background:var(--gloss);transform:scaleX(0);transform-origin:left;pointer-events:none;}
+  html.motion-ok .scroll-progress{display:block;}
 
   /* Responsive */
   @media (max-width:960px){
@@ -274,6 +338,8 @@
 </style>
 </head>
 <body>
+
+<div class="scroll-progress" aria-hidden="true"></div>
 
 <header class="site-header">
   <div class="wrap">
@@ -324,11 +390,18 @@
     </div>
   </section>
 
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <div class="marquee__group"><span>Product only</span><span>Real reactions</span><span>Unboxings</span><span>Routine integrations</span><span>Texture close-ups</span><span>Ingredient callouts</span><span>Made in Beirut</span></div>
+      <div class="marquee__group"><span>Product only</span><span>Real reactions</span><span>Unboxings</span><span>Routine integrations</span><span>Texture close-ups</span><span>Ingredient callouts</span><span>Made in Beirut</span></div>
+    </div>
+  </div>
+
   <section class="section section--mist" id="work">
-    <div class="wrap">
+    <div class="work-head">
       <div class="section__head">
         <h2>Sample work</h2>
-        <p class="lead muted">Six samples across our two styles. Use the buttons to filter. Clips are being filmed now and will appear here as they are finished.</p>
+        <p class="lead muted">Six samples across our two styles. Clips are being filmed now and will appear here as they are finished.</p>
       </div>
 
       <div class="filters" role="group" aria-label="Filter by video style">
@@ -336,7 +409,9 @@
         <button class="chip" type="button" data-filter="product" aria-pressed="false">Product only</button>
         <button class="chip" type="button" data-filter="people" aria-pressed="false">Real reactions</button>
       </div>
+    </div>
 
+    <div class="strip-viewport">
       <div class="wall">
         <!--
           Each card is one sample video. To replace a placeholder, fill in data-src (and optionally data-poster).
@@ -367,7 +442,7 @@
         </figure>
 
         <figure class="card" data-type="product">
-          <div class="reel" data-src="videos/lip-balm-showcase.mp4" data-poster="videos/lip-balm-showcase.jpg" data-label="Lip balm, product only, AI product showcase" style="--tint:var(--gloss);--on:var(--ink)">
+          <div class="reel" data-src="lip-balm-showcase.mp4" data-poster="lip-balm-showcase.jpg" data-label="Lip balm, product only, AI product showcase" style="--tint:var(--gloss);--on:var(--ink)">
             <span class="reel__bar"></span><span class="reel__tag">Product only</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
             <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
           </div>
@@ -390,42 +465,45 @@
           <figcaption><strong>Gua sha</strong><span>Product close-up</span><em class="style-line">Product only</em></figcaption>
         </figure>
       </div>
+    </div>
 
+    <div class="work-foot">
+      <div class="strip-progress" aria-hidden="true"><i></i></div>
       <p class="wall-note muted">Samples are independent concepts made to show our formats. They are not commissioned by or affiliated with any brand. The lip balm video was made from a single product photo with AI-assisted tools, and Lumella is not affiliated with or endorsed by Beesline.</p>
     </div>
   </section>
 
   <section class="section section--jade" id="make">
     <div class="wrap make">
-      <div class="section__head">
+      <div class="section__head" data-reveal>
         <h2>What we make</h2>
         <p class="lead muted">Two styles of video, in four formats that cover the way people actually decide to buy beauty products.</p>
       </div>
       <div class="make__body">
       <div class="styles">
-        <div class="style">
+        <div class="style" data-reveal>
           <h3>Product only</h3>
           <p>No people on screen. Macro textures, ingredient callouts, motion graphics and animated product shots built from your own photos or footage, edited with AI-assisted tools. Captions or a real voiceover carry the story.</p>
         </div>
-        <div class="style">
+        <div class="style" data-reveal>
           <h3>Real reactions</h3>
           <p>A real person tries your product on camera and says what they think in their own words, briefed to stay inside your claims guidelines.</p>
         </div>
       </div>
       <ul class="types">
-        <li>
+        <li data-reveal>
           <h3>Unboxings</h3>
           <p>The first-touch moment: packaging, reveal and an honest first reaction. Good for launches and gifting sets.</p>
         </li>
-        <li>
+        <li data-reveal>
           <h3>Routine integrations</h3>
           <p>Your product inside a real morning or evening routine, so viewers see where it fits in their own.</p>
         </li>
-        <li>
+        <li data-reveal>
           <h3>Texture and application close-ups</h3>
           <p>Macro shots of the formula and how it goes on. The footage that makes people want to touch the product.</p>
         </li>
-        <li>
+        <li data-reveal>
           <h3>Ingredient callouts</h3>
           <p>A short, clear walk through what is inside and what it is for, worded to stay within your claims guidelines.</p>
         </li>
@@ -436,7 +514,7 @@
 
   <section class="section" id="process">
     <div class="wrap">
-      <div class="section__head">
+      <div class="section__head" data-reveal>
         <h2>How a project works</h2>
         <p class="lead muted">One email to start. We handle scripting, casting, filming and editing.</p>
       </div>
@@ -463,19 +541,19 @@
 
   <section class="section section--mist">
     <div class="wrap">
-      <div class="section__head">
+      <div class="section__head" data-reveal>
         <h2>How we work</h2>
       </div>
       <div class="principles">
-        <div class="principle">
+        <div class="principle" data-reveal>
           <h3>Real people, real voices</h3>
           <p>Every person you see or hear in our videos is real. We use AI tools for editing, captions and motion graphics, never to create people, voices or product results.</p>
         </div>
-        <div class="principle">
+        <div class="principle" data-reveal>
           <h3>Claims-safe by default</h3>
           <p>Scripts avoid medical claims and follow your brand guidelines and platform ad policies, especially for skincare.</p>
         </div>
-        <div class="principle">
+        <div class="principle" data-reveal>
           <h3>Made for the feed</h3>
           <p>Vertical 9:16, 15 to 30 seconds, a hook in the first seconds and captions on, so the video works with the sound off.</p>
         </div>
@@ -485,28 +563,28 @@
 
   <section class="section" id="faq">
     <div class="wrap faq">
-      <div class="section__head">
+      <div class="section__head" data-reveal>
         <h2>Questions</h2>
         <p class="lead muted">Not here? Email us and we will answer within a few days.</p>
       </div>
       <div>
-        <details>
+        <details data-reveal>
           <summary>What is UGC?</summary>
           <p>User-generated content: videos that look like they came from a real customer instead of an ad studio. Brands post them organically and also run them as paid ads.</p>
         </details>
-        <details>
+        <details data-reveal>
           <summary>Do you use AI-generated people or voices?</summary>
           <p>No. Every person and voice in our videos is real. We use AI tools to help with editing, captions and motion graphics, and never to show a product doing something it does not do.</p>
         </details>
-        <details>
+        <details data-reveal>
           <summary>What formats and lengths do you deliver?</summary>
           <p>Vertical 9:16 videos of 15 to 30 seconds, captioned, ready for TikTok, Instagram Reels, YouTube Shorts and paid social. If you need something different, put it in your brief.</p>
         </details>
-        <details>
+        <details data-reveal>
           <summary>Where are you based?</summary>
           <p>Beirut. We work in English with beauty brands anywhere.</p>
         </details>
-        <details>
+        <details data-reveal>
           <summary>How do we start?</summary>
           <p>Email hello@lumellagroup.org with your product, the platform you are posting on and what you want the video to do. We reply with next steps and a quote.</p>
         </details>
@@ -517,8 +595,8 @@
   <section class="contact" id="contact">
     <div class="wrap">
       <h2>Tell us about your product.</h2>
-      <p class="lead">Send the brand, the product and where the video will run. We will come back with ideas and a quote.</p>
-      <div class="contact__meta">
+      <p class="lead" data-reveal>Send the brand, the product and where the video will run. We will come back with ideas and a quote.</p>
+      <div class="contact__meta" data-reveal>
         <a class="btn btn--solid" href="mailto:hello@lumellagroup.org?subject=Project%20enquiry&amp;body=Brand%3A%0D%0AProduct%3A%0D%0APlatform%20(TikTok%2C%20Reels%2C%20ads)%3A%0D%0AGoal%3A%0D%0A">Email hello@lumellagroup.org</a>
       </div>
     </div>
@@ -537,11 +615,13 @@
 
 <script>
 (function(){
+  var root = document.documentElement;
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* Filter chips */
+  /* ---------- Filter chips ---------- */
   var chips = document.querySelectorAll('.chip');
   var cards = document.querySelectorAll('.card');
+  var wall = document.querySelector('.wall');
   chips.forEach(function(chip){
     chip.addEventListener('click', function(){
       var f = chip.getAttribute('data-filter');
@@ -549,15 +629,34 @@
       cards.forEach(function(card){
         card.hidden = !(f === 'all' || card.getAttribute('data-type') === f);
       });
+      if(wall) wall.scrollLeft = 0;
+      swipeProgress();
+      if(window.ScrollTrigger){
+        ScrollTrigger.refresh();
+        /* In the pinned strip, return to the start of the strip so the page does not jump past it */
+        var pinned = ScrollTrigger.getAll().filter(function(t){ return t.pin; })[0];
+        if(pinned && root.classList.contains('pin-strip')){ window.scrollTo({top:pinned.start, behavior:'instant'}); }
+      }
     });
   });
 
-  /* Real videos: any .reel with a data-src becomes a playable video */
+  /* ---------- Progress line under the strip (swipe mode) ---------- */
+  var bar = document.querySelector('.strip-progress i');
+  function setProgress(v){ if(bar) bar.style.setProperty('--p', Math.min(1, Math.max(0, v)).toFixed(3)); }
+  function swipeProgress(){
+    if(!wall || root.classList.contains('pin-strip')) return;
+    setProgress((wall.scrollLeft + wall.clientWidth) / wall.scrollWidth);
+  }
+  if(wall){
+    wall.addEventListener('scroll', swipeProgress, {passive:true});
+    window.addEventListener('resize', swipeProgress);
+    swipeProgress();
+  }
+
+  /* ---------- Real videos: any .reel with a data-src becomes a playable video ---------- */
   var reels = Array.prototype.filter.call(document.querySelectorAll('.reel[data-src]'), function(r){
     return r.getAttribute('data-src').trim() !== '';
   });
-  if(!reels.length) return;
-
   var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function(entries){
     entries.forEach(function(e){
       var v = e.target.querySelector('video');
@@ -597,6 +696,148 @@
     else if(io){ io.observe(r); }
     else { v.play().catch(function(){}); }
   });
+
+  /* ---------- Motion (GSAP + ScrollTrigger). Skipped if reduced motion is on or the library did not load. ---------- */
+  function splitWords(el){
+    var words = el.textContent.trim().split(/\s+/);
+    el.setAttribute('aria-label', words.join(' '));
+    el.textContent = '';
+    words.forEach(function(w, i){
+      var outer = document.createElement('span'); outer.className = 'w'; outer.setAttribute('aria-hidden','true');
+      var inner = document.createElement('span'); inner.className = 'wi'; inner.textContent = w;
+      outer.appendChild(inner); el.appendChild(outer);
+      if(i < words.length - 1) el.appendChild(document.createTextNode(' '));
+    });
+    return el.querySelectorAll('.wi');
+  }
+
+  function initMotion(){
+    if(reduce || !window.gsap || !window.ScrollTrigger){ root.classList.remove('m-pending'); return; }
+    var mm;
+    try{
+      gsap.registerPlugin(ScrollTrigger);
+      root.classList.add('motion-ok');
+
+      /* Hero entrance */
+      var heroWords = splitWords(document.querySelector('.hero h1'));
+      root.classList.remove('m-pending');
+      gsap.timeline({defaults:{ease:'power3.out'}})
+        .from(heroWords, {yPercent:115, duration:.95, stagger:.07}, 0)
+        .from('.hero__copy > :not(h1)', {y:26, opacity:0, duration:.8, stagger:.1}, .4)
+        .from('.hero__reels .reel', {y:90, opacity:0, rotate:3, duration:1.1, stagger:.13}, .2);
+
+      mm = gsap.matchMedia();
+
+      /* Large screens: hero videos drift at different speeds while you scroll */
+      mm.add('(min-width:1000px)', function(){
+        gsap.utils.toArray('.hero__reels .reel').forEach(function(r, i){
+          gsap.to(r, {yPercent:[-5,-13,-8][i] || -6, ease:'none',
+            scrollTrigger:{trigger:'.hero', start:'top top', end:'bottom top', scrub:true}});
+        });
+      });
+
+      /* Large screens: sample work becomes a pinned strip that moves sideways as you scroll */
+      mm.add('(min-width:1000px) and (min-height:620px)', function(){
+        var sec = document.getElementById('work');
+        var view = sec.querySelector('.strip-viewport');
+        var track = sec.querySelector('.wall');
+        root.classList.add('pin-strip');
+        function dist(){ return Math.max(0, track.scrollWidth - view.clientWidth); }
+        gsap.to(track, {
+          x: function(){ return -dist(); }, ease:'none',
+          scrollTrigger:{
+            trigger:sec, start:'top top',
+            end:function(){ return '+=' + Math.max(1, Math.round(dist() * 1.25)); },
+            pin:true, scrub:.6, anticipatePin:1, invalidateOnRefresh:true,
+            onUpdate:function(self){ setProgress((self.progress * dist() + view.clientWidth) / track.scrollWidth); }
+          }
+        });
+        setProgress(view.clientWidth / track.scrollWidth);
+        return function(){ root.classList.remove('pin-strip'); swipeProgress(); };
+      });
+
+      /* Scroll progress line at the top of the page */
+      gsap.to('.scroll-progress', {scaleX:1, ease:'none',
+        scrollTrigger:{start:0, end:'max', scrub:.2}});
+
+      /* Reveal on scroll */
+      gsap.set('[data-reveal]', {y:28, opacity:0});
+      ScrollTrigger.batch('[data-reveal]', {
+        start:'top 90%', once:true,
+        onEnter:function(batch){
+          gsap.to(batch, {y:0, opacity:1, duration:.85, ease:'power3.out', stagger:.09, overwrite:true, clearProps:'transform'});
+        }
+      });
+
+      /* Process steps: line draws, then the step fades up */
+      gsap.set('.steps li', {y:24, opacity:0, '--draw':0});
+      ScrollTrigger.batch('.steps li', {
+        start:'top 90%', once:true,
+        onEnter:function(batch){
+          gsap.to(batch, {y:0, opacity:1, '--draw':1, duration:1, ease:'power3.out', stagger:.14, overwrite:true});
+        }
+      });
+
+      /* Contact headline */
+      var ch = document.querySelector('.contact h2');
+      gsap.from(splitWords(ch), {yPercent:115, duration:.95, stagger:.07, ease:'power3.out',
+        scrollTrigger:{trigger:ch, start:'top 85%', once:true}});
+
+      /* Smooth open and close for the questions */
+      document.querySelectorAll('details').forEach(function(d){
+        var sum = d.querySelector('summary'), p = d.querySelector('p');
+        sum.addEventListener('click', function(e){
+          e.preventDefault();
+          if(d.open){
+            d.classList.add('is-closing');
+            gsap.to(p, {height:0, paddingBottom:0, opacity:0, duration:.3, ease:'power2.inOut', onComplete:function(){
+              d.open = false; d.classList.remove('is-closing'); gsap.set(p, {clearProps:'all'}); ScrollTrigger.refresh();
+            }});
+          } else {
+            d.open = true;
+            gsap.fromTo(p, {height:0, paddingBottom:0, opacity:0}, {height:'auto', paddingBottom:24, opacity:1, duration:.4, ease:'power2.out', onComplete:function(){
+              gsap.set(p, {clearProps:'height,paddingBottom,opacity'}); ScrollTrigger.refresh();
+            }});
+          }
+        });
+      });
+
+      /* Menu and button links glide to their section */
+      var glide = null;
+      document.querySelectorAll('a[href^="#"]').forEach(function(a){
+        a.addEventListener('click', function(e){
+          var id = a.getAttribute('href').slice(1);
+          var el = id === 'top' ? document.body : document.getElementById(id);
+          if(!el) return;
+          e.preventDefault();
+          var y = 0;
+          if(id !== 'top'){
+            var pin = ScrollTrigger.getAll().filter(function(t){ return t.pin; })[0];
+            y = (id === 'work' && pin) ? pin.start : el.getBoundingClientRect().top + window.pageYOffset - 12;
+          }
+          var o = {y:window.pageYOffset};
+          if(glide) glide.kill();
+          glide = gsap.to(o, {y:Math.max(0,y), duration:1.1, ease:'power3.inOut', onUpdate:function(){ window.scrollTo(0, o.y); }});
+          if(history.pushState) history.pushState(null, '', '#' + id);
+        });
+      });
+      /* A touch or wheel during the glide takes over */
+      ['wheel','touchstart'].forEach(function(ev){ window.addEventListener(ev, function(){ if(glide) glide.kill(); }, {passive:true}); });
+
+      /* Fonts and images change layout once loaded, so re-measure */
+      if(document.fonts && document.fonts.ready){ document.fonts.ready.then(function(){ ScrollTrigger.refresh(); }); }
+      window.addEventListener('load', function(){ ScrollTrigger.refresh(); });
+    } catch(err){
+      /* Anything goes wrong: show the plain page */
+      try{ if(mm) mm.revert(); ScrollTrigger.getAll().forEach(function(t){ t.kill(); }); gsap.killTweensOf('*'); }catch(e2){}
+      document.querySelectorAll('[data-reveal],.steps li,.hero__copy > *,.hero__reels .reel,.wi,.scroll-progress').forEach(function(n){ n.style.cssText = ''; });
+      root.classList.remove('motion-ok','pin-strip','m-pending');
+      if(window.console) console.warn('Lumella motion disabled:', err);
+    }
+  }
+
+  if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', initMotion); }
+  else { initMotion(); }
 })();
 </script>
 </body>
