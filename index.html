@@ -103,7 +103,7 @@
   .btn--gloss:hover{background:var(--pearl);border-color:var(--pearl);}
 
   /* Header */
-  .site-header{padding-block:22px;}
+  .site-header{padding-block:22px;background:var(--wash,var(--pearl));transition:background-color .2s linear;}
   .site-header .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;}
   .wordmark{font-stretch:75%;font-weight:800;font-size:1.9rem;letter-spacing:-0.02em;text-decoration:none;line-height:1;}
   .nav{display:flex;align-items:center;gap:28px;}
@@ -162,7 +162,55 @@
     padding:6px 14px;border-radius:999px;white-space:nowrap;
     font-size:.8rem;font-weight:600;background:var(--on);color:var(--tint);
   }
-  .reel.has-video{cursor:pointer;}
+  .reel.has-video{cursor:zoom-in;}
+  .card .reel__sound{display:none !important;}
+  .reel__expand{position:absolute;z-index:2;right:12px;bottom:12px;width:36px;height:36px;border-radius:50%;
+    background:rgba(18,59,47,.78);color:#fff;display:grid;place-items:center;transition:transform .25s,background .25s;}
+  .reel__expand svg{width:17px;height:17px;}
+  .card .reel:hover .reel__expand,.card .reel:focus-visible .reel__expand{transform:scale(1.12);background:var(--gloss);color:var(--ink);}
+
+  /* Video viewer (opens when a sample is pressed) */
+  .lb{position:fixed;inset:0;z-index:200;display:none;place-items:center;padding:16px;
+    --fh:min(calc(100svh - 190px), 820px);}
+  .lb.is-open{display:grid;}
+  .lb__backdrop{position:absolute;inset:0;background:rgba(43,13,27,.86);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);opacity:0;transition:opacity .35s ease;}
+  .lb.is-shown .lb__backdrop{opacity:1;}
+  .lb__inner{position:relative;display:grid;gap:14px;justify-items:center;width:calc(var(--fh) * 9 / 16);max-width:100%;}
+  .lb__frame{position:relative;width:100%;aspect-ratio:9/16;border-radius:26px;overflow:hidden;background:#000;
+    box-shadow:0 40px 90px -30px rgba(0,0,0,.7);transform-origin:0 0;cursor:pointer;}
+  .lb__frame video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .lb__bigplay{position:absolute;left:50%;top:50%;translate:-50% -50%;width:68px;height:68px;border-radius:50%;
+    background:rgba(245,247,244,.92);color:var(--ink);display:none;place-items:center;pointer-events:none;}
+  .lb__bigplay svg{width:28px;height:28px;margin-left:4px;}
+  .lb.is-paused .lb__bigplay{display:grid;}
+  .lb__ui{width:100%;display:grid;gap:10px;color:var(--pearl);opacity:0;transition:opacity .3s ease .15s;}
+  .lb.is-shown .lb__ui{opacity:1;}
+  .lb__cap{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:.92rem;}
+  .lb__cap strong{font-size:1.05rem;}
+  .lb__cap span{opacity:.75;}
+  .lb__seek{width:100%;margin:0;height:22px;background:transparent;-webkit-appearance:none;appearance:none;cursor:pointer;
+    --p:0%;}
+  .lb__seek::-webkit-slider-runnable-track{height:5px;border-radius:5px;background:linear-gradient(90deg,var(--gloss) var(--p),rgba(245,247,244,.28) var(--p));}
+  .lb__seek::-moz-range-track{height:5px;border-radius:5px;background:linear-gradient(90deg,var(--gloss) var(--p),rgba(245,247,244,.28) var(--p));}
+  .lb__seek::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;margin-top:-5.5px;border-radius:50%;background:var(--pearl);border:0;}
+  .lb__seek::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--pearl);border:0;}
+  .lb__row{display:flex;align-items:center;gap:10px;}
+  .lb__time{font-variant-numeric:tabular-nums;font-size:.88rem;opacity:.85;margin-right:auto;}
+  .lb__btn{width:42px;height:42px;border-radius:50%;border:0;display:grid;place-items:center;cursor:pointer;
+    background:rgba(245,247,244,.14);color:var(--pearl);transition:background .2s,color .2s;}
+  .lb__btn:hover{background:var(--gloss);color:var(--ink);}
+  .lb__btn svg{width:19px;height:19px;}
+  .lb__btn .i-play,.lb.is-paused .lb__btn .i-pause,.lb__btn .i-on,.lb.is-sound .lb__btn .i-off{display:none;}
+  .lb.is-paused .lb__btn .i-play,.lb.is-sound .lb__btn .i-on{display:block;}
+  .lb__close{position:fixed;top:16px;right:16px;z-index:3;background:rgba(43,13,27,.6);}
+  .lb__nav{position:absolute;top:calc(50% - 60px);z-index:2;}
+  .lb__nav--prev{left:-64px;} .lb__nav--next{right:-64px;}
+  @media (max-width:640px){
+    .lb__nav{position:static;}
+    .lb__nav--prev{order:-1;}
+  }
+  .lb{overscroll-behavior:contain;touch-action:none;}
+  .lb__seek{touch-action:pan-x;}
   .reel.has-video .reel__tag{display:none;}
   .reel.has-video .reel__bar,
   .reel.has-video .reel__play,
@@ -180,7 +228,11 @@
   .specs{display:flex;flex-wrap:wrap;gap:6px 28px;margin:8px 0 0;padding:14px 0 0;list-style:none;border-top:1px solid var(--line);align-self:stretch;max-width:34em;}
   .specs li{font-weight:500;}
   /* Hero orbit: 6 cards on a turning carousel ring (positions set by script) */
-  .hero{overflow-x:clip;}
+  .hero{overflow-x:clip;background:var(--wash,var(--pearl));}
+  /* soft glow behind the ring in the front video's colour */
+  .orbit::before{content:"";position:absolute;left:50%;top:50%;width:150%;aspect-ratio:1;translate:-50% -50%;pointer-events:none;
+    background:radial-gradient(closest-side,var(--glow,transparent),transparent 72%);z-index:0;}
+  .orbit__stage{z-index:1;}
   .orbit{--cw:190px;--ch:calc(var(--cw) * 16 / 9);position:relative;width:100%;height:calc(var(--ch) + 70px);}
   .orbit__stage{position:absolute;inset:0;perspective:1000px;perspective-origin:50% 45%;}
   .orbit__ring{position:absolute;left:50%;top:50%;transform-style:preserve-3d;}
@@ -447,7 +499,7 @@
           Change the caption text inside <figcaption> to match the real video.
         -->
         <figure class="card" data-type="product">
-          <div class="reel" data-src="pdrn-mist-showcase.mp4" data-poster="pdrn-mist-showcase.jpg" data-label="Hydrating mist, product only, texture close-up" style="--tint:var(--blush);--on:var(--ink)">
+          <div class="reel" data-src="pdrn-mist-showcase.mp4" data-poster="pdrn-mist-showcase.jpg" data-label="Hydrating mist, product only, texture close-up" data-wash="#BFEBE6" style="--tint:var(--blush);--on:var(--ink)">
             <span class="reel__bar"></span><span class="reel__tag">Product only</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
             <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
           </div>
@@ -455,7 +507,7 @@
         </figure>
 
         <figure class="card" data-type="product">
-          <div class="reel" data-src="night-mask-showcase.mp4" data-poster="night-mask-showcase.jpg" data-label="Overnight mask, product only, pour and packshot" style="--tint:var(--jade-tint);--on:var(--ink)">
+          <div class="reel" data-src="night-mask-showcase.mp4" data-poster="night-mask-showcase.jpg" data-label="Overnight mask, product only, pour and packshot" data-wash="#FFC9D9" style="--tint:var(--jade-tint);--on:var(--ink)">
             <span class="reel__bar"></span><span class="reel__tag">Product only</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
             <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
           </div>
@@ -463,7 +515,7 @@
         </figure>
 
         <figure class="card" data-type="product">
-          <div class="reel" data-src="lip-balm-showcase.mp4" data-poster="lip-balm-showcase.jpg" data-label="Lip balm, product only, AI product showcase" style="--tint:var(--gloss);--on:var(--ink)">
+          <div class="reel" data-src="lip-balm-showcase.mp4" data-poster="lip-balm-showcase.jpg" data-label="Lip balm, product only, AI product showcase" data-wash="#FFE09A" style="--tint:var(--gloss);--on:var(--ink)">
             <span class="reel__bar"></span><span class="reel__tag">Product only</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
             <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
           </div>
@@ -471,7 +523,7 @@
         </figure>
 
         <figure class="card is-soon" data-type="people">
-          <div class="reel" data-src="" data-poster="" data-label="Cleanser, real reaction, routine integration" style="--tint:var(--jade-tint);--on:var(--ink)">
+          <div class="reel" data-src="" data-poster="" data-label="Cleanser, real reaction, routine integration" data-wash="#CDE8D9" style="--tint:var(--jade-tint);--on:var(--ink)">
             <span class="reel__bar"></span><span class="reel__tag">Real reactions</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
             <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
           </div>
@@ -479,7 +531,7 @@
         </figure>
 
         <figure class="card is-soon" data-type="people">
-          <div class="reel" data-src="" data-poster="" data-label="Moisturizer, real reaction, first impressions" style="--tint:var(--jade);--on:var(--pearl)">
+          <div class="reel" data-src="" data-poster="" data-label="Moisturizer, real reaction, first impressions" data-wash="#E4DCF7" style="--tint:var(--jade);--on:var(--pearl)">
             <span class="reel__bar"></span><span class="reel__tag">Real reactions</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
             <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
           </div>
@@ -487,7 +539,7 @@
         </figure>
 
         <figure class="card is-soon" data-type="people">
-          <div class="reel" data-src="" data-poster="" data-label="Mascara, real reaction, unboxing" style="--tint:#EDEFE9;--on:var(--ink)">
+          <div class="reel" data-src="" data-poster="" data-label="Mascara, real reaction, unboxing" data-wash="#FFD9C2" style="--tint:#EDEFE9;--on:var(--ink)">
             <span class="reel__bar"></span><span class="reel__tag">Real reactions</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
             <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
           </div>
@@ -726,9 +778,65 @@
         reel.classList.add('has-video');
       }
       ring.appendChild(item);
+      item._reel = card.querySelector('.reel');
       return {el:item, veil:veil, video:v, playing:false};
     });
     var n = items.length; if(!n) return;
+
+    /* Each card's colour: average of its cover image, or its placeholder tint */
+    function hexRgb(h){ h = h.replace('#',''); if(h.length === 3) h = h.replace(/./g,'$&$&'); var v = parseInt(h,16); return [v>>16&255, v>>8&255, v&255]; }
+    function parseCol(c){ var m = c.match(/\d+(\.\d+)?/g); return m ? [+m[0], +m[1], +m[2]] : [245,247,244]; }
+    items.forEach(function(it){
+      var reel = it.el.querySelector('.reel');
+      it.col = parseCol(getComputedStyle(reel).backgroundColor);
+      var w = reel.getAttribute('data-wash');
+      if(w){ it.col = hexRgb(w); return; }           /* hand-picked colour wins */
+      var poster = reel.getAttribute('data-poster');
+      if(!poster) return;
+      var img = new Image();
+      img.onload = function(){
+        try{
+          var c = document.createElement('canvas'); c.width = 12; c.height = 20;
+          var x = c.getContext('2d'); x.drawImage(img, 0, 0, 12, 20);
+          var d = x.getImageData(0, 0, 12, 20).data, r = 0, g = 0, b = 0, k = 0;
+          for(var i = 0; i < d.length; i += 4){ r += d[i]; g += d[i+1]; b += d[i+2]; k++; }
+          r /= k; g /= k; b /= k;
+          var avg = (r + g + b) / 3, boost = 1.6;             /* push saturation so the tint reads */
+          it.col = [avg + (r - avg) * boost, avg + (g - avg) * boost, avg + (b - avg) * boost].map(function(v){ return Math.max(0, Math.min(255, v)); });
+        }catch(_){}
+      };
+      img.src = poster;
+    });
+    var PEARL = [245,247,244], rootStyle = document.documentElement.style, lastWash = '';
+    function wash(weights){
+      var tot = 0, r = 0, g = 0, b = 0;
+      for(var i = 0; i < n; i++){ var w = weights[i]; tot += w; r += items[i].col[0] * w; g += items[i].col[1] * w; b += items[i].col[2] * w; }
+      if(!tot) return;
+      r /= tot; g /= tot; b /= tot;
+      function mix(a, t){ return Math.round(PEARL[0] + (a[0] - PEARL[0]) * t) + ',' + Math.round(PEARL[1] + (a[1] - PEARL[1]) * t) + ',' + Math.round(PEARL[2] + (a[2] - PEARL[2]) * t); }
+      var c = [r, g, b];
+      var bg = 'rgb(' + mix(c, 0.62) + ')';                  /* pastel, light enough that the headline stays crisp */
+      if(bg !== lastWash){
+        lastWash = bg;
+        rootStyle.setProperty('--wash', bg);
+        rootStyle.setProperty('--glow', 'rgba(' + mix(c, 1) + ',0.9)');
+      }
+    }
+
+    /* Ring leans toward the mouse (laptops and desktops only) */
+    var canTilt = !reduce && window.matchMedia && matchMedia('(hover:hover) and (pointer:fine)').matches;
+    var tiltX = 0, tiltY = 0, tX = 0, tY = 0;
+    if(canTilt){
+      var heroEl = document.querySelector('.hero');
+      heroEl.addEventListener('mousemove', function(e){
+        var b = orbit.getBoundingClientRect();
+        var nx = (e.clientX - (b.left + b.width / 2)) / (window.innerWidth / 2);
+        var ny = (e.clientY - (b.top + b.height / 2)) / (window.innerHeight / 2);
+        tY = Math.max(-1, Math.min(1, nx)) * 14;            /* degrees */
+        tX = Math.max(-1, Math.min(1, ny)) * -10;
+      });
+      heroEl.addEventListener('mouseleave', function(){ tX = 0; tY = 0; });
+    }
 
     var cw = 190, radius = 220;
     function size(){
@@ -748,6 +856,11 @@
     var dragging = false, dragMoved = false, dragX = 0, dragT = 0, dragVel = 0, dragDist = 0;
 
     function place(){
+      var weights = [];
+      if(canTilt){
+        tiltX += (tX - tiltX) * 0.08; tiltY += (tY - tiltY) * 0.08;
+        ring.style.transform = 'translateZ(' + (-radius) + 'px) rotateX(' + tiltX.toFixed(2) + 'deg) rotateY(' + tiltY.toFixed(2) + 'deg) translateZ(' + radius + 'px)';
+      }
       for(var i = 0; i < n; i++){
         var a = angle + i * (Math.PI * 2 / n);
         var s = Math.sin(a), c = Math.cos(a);
@@ -756,12 +869,14 @@
         it.el.style.transform = 'translate3d(' + (s * radius).toFixed(1) + 'px,0,' + ((c - 1) * radius).toFixed(1) + 'px) rotateY(' + (s * -28).toFixed(1) + 'deg)';
         it.veil.style.opacity = (0.75 * (1 - depth) * (1 - depth) + 0.12 * (1 - depth)).toFixed(3);  /* fades into the page, stays opaque so cards never show through each other */
         it.el.style.zIndex = Math.round(depth * 100);
+        weights.push(Math.pow(Math.max(0, c), 6));
         var front = c > 0.82;
         if(it.video){
           if(front && !it.playing && visible && !reduce){ it.playing = true; it.video.play().catch(function(){}); }
           else if((!front || !visible) && it.playing){ it.playing = false; it.video.pause(); }
         }
       }
+      wash(weights);
     }
 
     var visible = true, last = 0, raf = 0;
@@ -814,8 +929,14 @@
     orbit.addEventListener('pointercancel', endDrag);
     orbit.addEventListener('lostpointercapture', endDrag);
     /* A tap (not a drag) takes you to the full sample work */
-    orbit.addEventListener('click', function(){
+    orbit.addEventListener('click', function(e){
       if(dragMoved) return;
+      var hit = (document.elementsFromPoint ? document.elementsFromPoint(e.clientX, e.clientY) : []).filter(function(n){
+        return n.classList && n.classList.contains('orbit__item');
+      })[0];
+      if(hit && hit._reel && hit._reel.classList.contains('has-video') && window.lumellaOpenVideo){
+        window.lumellaOpenVideo(hit._reel, hit.querySelector('.reel')); return;
+      }
       var w = document.getElementById('work');
       if(w) w.scrollIntoView({behavior: reduce ? 'auto' : 'smooth'});
     });
@@ -863,25 +984,157 @@
     if(card) card.classList.add('has-video-card');
     r.tabIndex = 0;
     r.setAttribute('role','button');
-    r.setAttribute('aria-label', (r.getAttribute('data-label') || 'Video') + '. Press to turn sound on or off.');
-
-    function toggle(){
-      if(reduce){
-        if(v.paused){ v.play(); r.classList.remove('is-paused'); } else { v.pause(); r.classList.add('is-paused'); }
-        return;
-      }
-      v.muted = !v.muted;
-      r.classList.toggle('is-sound', !v.muted);
-    }
-    r.addEventListener('click', toggle);
+    r.setAttribute('aria-label', (r.getAttribute('data-label') || 'Video') + '. Open larger with sound and controls.');
+    var ex = document.createElement('span'); ex.className = 'reel__expand'; ex.setAttribute('aria-hidden','true');
+    ex.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>';
+    r.appendChild(ex);
+    function open(){ if(window.lumellaOpenVideo) window.lumellaOpenVideo(r); }
+    r.addEventListener('click', open);
     r.addEventListener('keydown', function(e){
-      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); open(); }
     });
 
     if(reduce){ r.classList.add('is-paused'); }
     else if(io){ io.observe(r); }
     else { v.play().catch(function(){}); }
   });
+
+  /* ---------- Video viewer: press a sample to see it large, scrub, sound, previous / next ---------- */
+  (function(){
+    var list = reels;                      /* finished sample videos, in page order */
+    if(!list.length) return;
+    var I = {
+      play:'<svg class="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg><svg class="i-pause" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>',
+      snd:'<svg class="i-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="i-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>',
+      x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+      prev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+      next:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>'
+    };
+    var lb = document.createElement('div');
+    lb.className = 'lb';
+    lb.setAttribute('role','dialog'); lb.setAttribute('aria-modal','true'); lb.setAttribute('aria-label','Sample video');
+    lb.innerHTML =
+      '<div class="lb__backdrop"></div>' +
+      '<button class="lb__btn lb__close" type="button" aria-label="Close">' + I.x + '</button>' +
+      '<div class="lb__inner">' +
+        '<div class="lb__frame"><video playsinline loop preload="auto"></video><span class="lb__bigplay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg></span></div>' +
+        '<div class="lb__ui">' +
+          '<div class="lb__cap"><strong></strong><span></span></div>' +
+          '<input class="lb__seek" type="range" min="0" max="1000" step="1" value="0" aria-label="Seek">' +
+          '<div class="lb__row">' +
+            '<button class="lb__btn lb__nav lb__nav--prev" type="button" aria-label="Previous video">' + I.prev + '</button>' +
+            '<button class="lb__btn lb__pp" type="button" aria-label="Play or pause">' + I.play + '</button>' +
+            '<span class="lb__time">0:00 / 0:00</span>' +
+            '<button class="lb__btn lb__snd" type="button" aria-label="Sound on or off">' + I.snd + '</button>' +
+            '<button class="lb__btn lb__nav lb__nav--next" type="button" aria-label="Next video">' + I.next + '</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(lb);
+    var frame = lb.querySelector('.lb__frame'), vid = lb.querySelector('video'), seek = lb.querySelector('.lb__seek');
+    var cap = lb.querySelector('.lb__cap strong'), sub = lb.querySelector('.lb__cap span'), time = lb.querySelector('.lb__time');
+    var idx = 0, lastFocus = null, fromEl = null, seeking = false, raf = 0;
+
+    function fmt(t){ t = Math.max(0, t || 0); var m = Math.floor(t / 60), s = Math.floor(t % 60); return m + ':' + (s < 10 ? '0' : '') + s; }
+    function draw(){
+      var d = vid.duration || 0, t = vid.currentTime || 0;
+      if(!seeking && d){ seek.value = Math.round(t / d * 1000); }
+      seek.style.setProperty('--p', (seek.value / 10) + '%');
+      time.textContent = fmt(t) + ' / ' + fmt(d);
+    }
+    function loop(){ draw(); raf = lb.classList.contains('is-open') ? requestAnimationFrame(loop) : 0; }
+    function sync(){ lb.classList.toggle('is-paused', vid.paused); lb.classList.toggle('is-sound', !vid.muted); }
+
+    function load(i){
+      idx = (i + list.length) % list.length;
+      var r = list[idx], card = r.closest('.card');
+      vid.src = r.getAttribute('data-src');
+      vid.poster = r.getAttribute('data-poster') || '';
+      var t = card && card.querySelector('figcaption strong'), u = card && card.querySelector('figcaption span');
+      cap.textContent = t ? t.textContent : '';
+      sub.textContent = u ? u.textContent : '';
+      seek.value = 0; draw();
+      var many = list.length > 1;
+      lb.querySelectorAll('.lb__nav').forEach(function(b){ b.hidden = !many; });
+      if(!reduce) vid.play().catch(function(){ sync(); }); else sync();
+    }
+
+    function flip(el, opening, done){
+      if(reduce || !el || !frame.animate){ done && done(); return; }
+      var a = el.getBoundingClientRect(), b = frame.getBoundingClientRect();
+      if(!a.width || a.bottom < 0 || a.top > innerHeight){ done && done(); return; }
+      var from = 'translate(' + (a.left - b.left) + 'px,' + (a.top - b.top) + 'px) scale(' + (a.width / b.width) + ',' + (a.height / b.height) + ')';
+      var kf = opening ? [{transform:from, borderRadius:'60px'}, {transform:'none', borderRadius:'26px'}] : [{transform:'none'}, {transform:from}];
+      var an = frame.animate(kf, {duration: opening ? 480 : 360, easing:'cubic-bezier(.2,.7,.2,1)'});
+      an.onfinish = function(){ done && done(); };
+    }
+
+    function pauseOthers(){ document.querySelectorAll('.reel video').forEach(function(v){ if(v !== vid) v.pause(); }); }
+
+    window.lumellaOpenVideo = function(reel, originEl){
+      var i = list.indexOf(reel); if(i < 0) return;
+      lastFocus = document.activeElement; fromEl = originEl || reel;
+      pauseOthers();
+      vid.muted = false;                     /* opened on purpose: play with sound */
+      lb.classList.add('is-open');
+      load(i);
+      requestAnimationFrame(function(){ lb.classList.add('is-shown'); flip(fromEl, true); });
+      lb.querySelector('.lb__close').focus({preventScroll:true});
+      loop();
+    };
+    function close(){
+      if(!lb.classList.contains('is-open')) return;
+      vid.pause();
+      lb.classList.remove('is-shown');
+      var target = (list[idx] === fromEl || (fromEl && fromEl.closest && fromEl.closest('.orbit'))) ? fromEl : list[idx];
+      flip(target, false, function(){
+        lb.classList.remove('is-open');
+        vid.removeAttribute('src'); vid.load();
+        if(lastFocus && lastFocus.focus) lastFocus.focus({preventScroll:true});
+        /* let the page's own previews resume */
+        reels.forEach(function(r){ var v = r.querySelector('video'); var b = r.getBoundingClientRect();
+          if(v && !reduce && b.bottom > 0 && b.top < innerHeight) v.play().catch(function(){}); });
+      });
+    }
+    function toggle(){ if(vid.paused) vid.play().catch(function(){}); else vid.pause(); }
+
+    /* Lock page scrolling while open without touching the layout (keeps the pinned strip where it was) */
+    function block(e){ if(lb.classList.contains('is-open') && e.target !== seek) e.preventDefault(); }
+    lb.addEventListener('wheel', block, {passive:false});
+    lb.addEventListener('touchmove', block, {passive:false});
+
+    vid.addEventListener('play', sync); vid.addEventListener('pause', sync); vid.addEventListener('volumechange', sync);
+    vid.addEventListener('loadedmetadata', draw);
+    frame.addEventListener('click', toggle);
+    lb.querySelector('.lb__pp').addEventListener('click', toggle);
+    lb.querySelector('.lb__snd').addEventListener('click', function(){ vid.muted = !vid.muted; });
+    lb.querySelector('.lb__close').addEventListener('click', close);
+    lb.querySelector('.lb__backdrop').addEventListener('click', close);
+    lb.querySelector('.lb__nav--prev').addEventListener('click', function(){ fromEl = null; load(idx - 1); });
+    lb.querySelector('.lb__nav--next').addEventListener('click', function(){ fromEl = null; load(idx + 1); });
+    seek.addEventListener('input', function(){
+      seeking = true;
+      if(vid.duration) vid.currentTime = seek.value / 1000 * vid.duration;
+      draw();
+    });
+    seek.addEventListener('change', function(){ seeking = false; });
+    seek.addEventListener('pointerup', function(){ seeking = false; });
+
+    lb.addEventListener('keydown', function(e){
+      if(e.key === 'Escape'){ e.preventDefault(); close(); return; }
+      if(e.target === seek) return;        /* the slider handles its own arrow keys */
+      if(e.key === ' ' || e.key === 'k'){ e.preventDefault(); toggle(); }
+      else if(e.key === 'ArrowLeft'){ e.preventDefault(); vid.currentTime = Math.max(0, vid.currentTime - 1); }
+      else if(e.key === 'ArrowRight'){ e.preventDefault(); vid.currentTime = Math.min(vid.duration || 0, vid.currentTime + 1); }
+      else if(e.key === 'm'){ vid.muted = !vid.muted; }
+      else if(e.key === 'Tab'){        /* keep focus inside the viewer */
+        var f = Array.prototype.filter.call(lb.querySelectorAll('button,input'), function(n){ return !n.hidden && n.offsetParent !== null; });
+        var first = f[0], last = f[f.length - 1];
+        if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+        else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+      }
+    });
+  })();
 
   /* ---------- Motion (GSAP + ScrollTrigger). Skipped if reduced motion is on or the library did not load. ---------- */
   function splitWords(el){
