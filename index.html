@@ -157,6 +157,12 @@
   }
   .reel__sound svg{width:18px;height:18px;}
   .reel__sound .on{display:none;}
+  .card.is-soon .reel__play{display:none;}
+  .card.is-soon .reel::after{
+    content:"Filming now";position:absolute;z-index:1;left:50%;top:50%;translate:-50% -50%;
+    padding:6px 14px;border-radius:999px;white-space:nowrap;
+    font-size:.8rem;font-weight:600;background:var(--on);color:var(--tint);
+  }
   .reel.has-video{cursor:pointer;}
   .reel.has-video .reel__tag{display:none;}
   .reel.has-video .reel__bar,
@@ -372,17 +378,17 @@
         </ul>
       </div>
 
-      <div class="hero__reels" aria-label="Sample videos, coming soon">
+      <div class="hero__reels" aria-label="Sample videos">
         <!-- Swap in a real video: fill data-src (see the note at the top of this file). -->
-        <div class="reel" data-src="" data-poster="" data-label="Hero video 1" style="--tint:var(--blush);--on:var(--ink)">
+        <div class="reel" data-src="pdrn-mist-showcase.mp4" data-poster="pdrn-mist-showcase.jpg" data-label="Hydrating mist, product only" style="--tint:var(--blush);--on:var(--ink)">
           <span class="reel__bar"></span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
           <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
         </div>
-        <div class="reel" data-src="" data-poster="" data-label="Hero video 2" style="--tint:var(--jade);--on:var(--pearl)">
+        <div class="reel" data-src="night-mask-showcase.mp4" data-poster="night-mask-showcase.jpg" data-label="Overnight mask, product only" style="--tint:var(--jade);--on:var(--pearl)">
           <span class="reel__bar"></span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
           <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
         </div>
-        <div class="reel" data-src="" data-poster="" data-label="Hero video 3" style="--tint:var(--gloss);--on:var(--ink)">
+        <div class="reel" data-src="lip-balm-showcase.mp4" data-poster="lip-balm-showcase.jpg" data-label="Lip balm, product only" style="--tint:var(--gloss);--on:var(--ink)">
           <span class="reel__bar"></span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
           <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
         </div>
@@ -401,7 +407,7 @@
     <div class="work-head">
       <div class="section__head">
         <h2>Sample work</h2>
-        <p class="lead muted">Six samples across our two styles. Clips are being filmed now and will appear here as they are finished.</p>
+        <p class="lead muted">Product only samples are live. Real reaction clips are being filmed now and will appear here as they are finished.</p>
       </div>
 
       <div class="filters" role="group" aria-label="Filter by video style">
@@ -417,28 +423,20 @@
           Each card is one sample video. To replace a placeholder, fill in data-src (and optionally data-poster).
           Change the caption text inside <figcaption> to match the real video.
         -->
-        <figure class="card" data-type="people">
-          <div class="reel" data-src="" data-poster="" data-label="Cleanser, real reaction, routine integration" style="--tint:var(--jade-tint);--on:var(--ink)">
-            <span class="reel__bar"></span><span class="reel__tag">Real reactions</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
-            <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
-          </div>
-          <figcaption><strong>Cleanser</strong><span>Routine integration</span><em class="style-line">Real reactions</em></figcaption>
-        </figure>
-
         <figure class="card" data-type="product">
-          <div class="reel" data-src="" data-poster="" data-label="Serum, product only, ingredient callout" style="--tint:var(--blush);--on:var(--ink)">
+          <div class="reel" data-src="pdrn-mist-showcase.mp4" data-poster="pdrn-mist-showcase.jpg" data-label="Hydrating mist, product only, texture close-up" style="--tint:var(--blush);--on:var(--ink)">
             <span class="reel__bar"></span><span class="reel__tag">Product only</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
             <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
           </div>
-          <figcaption><strong>Serum</strong><span>Ingredient callout</span><em class="style-line">Product only</em></figcaption>
+          <figcaption><strong>Hydrating mist</strong><span>Texture close-up</span><em class="style-line">Product only</em></figcaption>
         </figure>
 
-        <figure class="card" data-type="people">
-          <div class="reel" data-src="" data-poster="" data-label="Moisturizer, real reaction, first impressions" style="--tint:var(--jade);--on:var(--pearl)">
-            <span class="reel__bar"></span><span class="reel__tag">Real reactions</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
+        <figure class="card" data-type="product">
+          <div class="reel" data-src="night-mask-showcase.mp4" data-poster="night-mask-showcase.jpg" data-label="Overnight mask, product only, pour and packshot" style="--tint:var(--jade-tint);--on:var(--ink)">
+            <span class="reel__bar"></span><span class="reel__tag">Product only</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
             <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
           </div>
-          <figcaption><strong>Moisturizer</strong><span>First impressions</span><em class="style-line">Real reactions</em></figcaption>
+          <figcaption><strong>Overnight mask</strong><span>Pour and packshot</span><em class="style-line">Product only</em></figcaption>
         </figure>
 
         <figure class="card" data-type="product">
@@ -446,30 +444,38 @@
             <span class="reel__bar"></span><span class="reel__tag">Product only</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
             <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
           </div>
-          <figcaption><strong>Lip balm</strong><span>AI product showcase</span><em class="style-line">Product only</em></figcaption>
+          <figcaption><strong>Lip balm</strong><span>Product showcase</span><em class="style-line">Product only</em></figcaption>
         </figure>
 
-        <figure class="card" data-type="people">
+        <figure class="card is-soon" data-type="people">
+          <div class="reel" data-src="" data-poster="" data-label="Cleanser, real reaction, routine integration" style="--tint:var(--jade-tint);--on:var(--ink)">
+            <span class="reel__bar"></span><span class="reel__tag">Real reactions</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
+            <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
+          </div>
+          <figcaption><strong>Cleanser</strong><span>Routine integration</span><em class="style-line">Real reactions, filming now</em></figcaption>
+        </figure>
+
+        <figure class="card is-soon" data-type="people">
+          <div class="reel" data-src="" data-poster="" data-label="Moisturizer, real reaction, first impressions" style="--tint:var(--jade);--on:var(--pearl)">
+            <span class="reel__bar"></span><span class="reel__tag">Real reactions</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
+            <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
+          </div>
+          <figcaption><strong>Moisturizer</strong><span>First impressions</span><em class="style-line">Real reactions, filming now</em></figcaption>
+        </figure>
+
+        <figure class="card is-soon" data-type="people">
           <div class="reel" data-src="" data-poster="" data-label="Mascara, real reaction, unboxing" style="--tint:#EDEFE9;--on:var(--ink)">
             <span class="reel__bar"></span><span class="reel__tag">Real reactions</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
             <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
           </div>
-          <figcaption><strong>Mascara</strong><span>Unboxing and reaction</span><em class="style-line">Real reactions</em></figcaption>
-        </figure>
-
-        <figure class="card" data-type="product">
-          <div class="reel" data-src="" data-poster="" data-label="Gua sha, product only, close-up" style="--tint:var(--jade-tint);--on:var(--ink)">
-            <span class="reel__bar"></span><span class="reel__tag">Product only</span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
-            <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
-          </div>
-          <figcaption><strong>Gua sha</strong><span>Product close-up</span><em class="style-line">Product only</em></figcaption>
+          <figcaption><strong>Mascara</strong><span>Unboxing and reaction</span><em class="style-line">Real reactions, filming now</em></figcaption>
         </figure>
       </div>
     </div>
 
     <div class="work-foot">
       <div class="strip-progress" aria-hidden="true"><i></i></div>
-      <p class="wall-note muted">Samples are independent concepts made to show our formats. They are not commissioned by or affiliated with any brand. The lip balm video was made from a single product photo with AI-assisted tools, and Lumella is not affiliated with or endorsed by Beesline.</p>
+      <p class="wall-note muted">Samples are independent concepts made to show our formats. They are not commissioned by or affiliated with any brand. Product only videos are made with AI-assisted tools from product photos. Lumella is not affiliated with or endorsed by Anua, Medicube or Beesline.</p>
     </div>
   </section>
 
