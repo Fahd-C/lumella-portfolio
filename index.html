@@ -131,8 +131,7 @@
   .reel__bar::after{content:"";position:absolute;inset:0;border-radius:3px;background:var(--on);transform-origin:left;transform:scaleX(.38);}
   @media (prefers-reduced-motion:no-preference){
     .reel__bar::after{animation:story 7s linear infinite;}
-    .card:nth-child(odd) .reel__bar::after,.hero__reels .reel:nth-child(2) .reel__bar::after{animation-delay:-3.2s;}
-    .hero__reels .reel:nth-child(3) .reel__bar::after{animation-delay:-5s;}
+    .card:nth-child(odd) .reel__bar::after{animation-delay:-3.2s;}
     @keyframes story{from{transform:scaleX(0);}to{transform:scaleX(1);}}
   }
   .reel__play{
@@ -157,8 +156,8 @@
   }
   .reel__sound svg{width:18px;height:18px;}
   .reel__sound .on{display:none;}
-  .card.is-soon .reel__play{display:none;}
-  .card.is-soon .reel::after{
+  .is-soon .reel__play{display:none;}
+  .is-soon .reel::after{
     content:"Filming now";position:absolute;z-index:1;left:50%;top:50%;translate:-50% -50%;
     padding:6px 14px;border-radius:999px;white-space:nowrap;
     font-size:.8rem;font-weight:600;background:var(--on);color:var(--tint);
@@ -180,10 +179,22 @@
   .hero__actions{display:flex;flex-wrap:wrap;gap:12px;}
   .specs{display:flex;flex-wrap:wrap;gap:6px 28px;margin:8px 0 0;padding:14px 0 0;list-style:none;border-top:1px solid var(--line);align-self:stretch;max-width:34em;}
   .specs li{font-weight:500;}
-  .hero__reels{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.6vw,18px);align-items:start;padding-bottom:64px;}
-  .hero__reels .reel:nth-child(2){margin-top:64px;}
-  .hero__reels .reel:nth-child(3){margin-top:20px;}
-  html.m-pending .hero__copy > *,html.m-pending .hero__reels .reel{opacity:0;}
+  /* Hero orbit: 6 cards on a turning carousel ring (positions set by script) */
+  .hero{overflow-x:clip;}
+  .orbit{--cw:190px;--ch:calc(var(--cw) * 16 / 9);position:relative;width:100%;height:calc(var(--ch) + 70px);}
+  .orbit__stage{position:absolute;inset:0;perspective:1000px;perspective-origin:50% 45%;}
+  .orbit__ring{position:absolute;left:50%;top:50%;transform-style:preserve-3d;}
+  .orbit__item{position:absolute;left:0;top:0;width:var(--cw);margin:calc(var(--ch) / -2) 0 0 calc(var(--cw) / -2);
+    will-change:transform,opacity;cursor:pointer;}
+  .orbit__item .reel{box-shadow:0 18px 40px -18px rgba(43,13,27,.45);}
+  .orbit__veil{position:absolute;inset:0;z-index:5;border-radius:22px;background:var(--pearl);pointer-events:none;opacity:0;}
+  .orbit .reel__tag{font-size:.68rem;}
+  .orbit .is-soon .reel::after{font-size:.72rem;padding:5px 12px;}
+  .orbit .reel__sound{display:none !important;}
+  .orbit .reel.has-video .reel__tag{display:block;}
+  .orbit .reel__bar::after{animation:none !important;}
+  .orbit:not(.is-live) .orbit__item{opacity:0;}
+  html.m-pending .hero__copy > *,html.m-pending .orbit{opacity:0;}
   .w{display:inline-block;overflow:clip;vertical-align:top;padding-block:.06em .16em;margin-block:-.06em -.16em;}
   .wi{display:inline-block;will-change:transform;}
 
@@ -331,7 +342,7 @@
     .hero .wrap,.make,.faq{grid-template-columns:1fr;}
     .steps{grid-template-columns:repeat(2,1fr);}
     .principles{grid-template-columns:1fr;}
-    .hero__reels{max-width:640px;}
+    .orbit{max-width:640px;margin-inline:auto;}
   }
   @media (max-width:640px){
     .nav a:not(.btn){display:none;}
@@ -378,20 +389,10 @@
         </ul>
       </div>
 
-      <div class="hero__reels" aria-label="Sample videos">
-        <!-- Swap in a real video: fill data-src (see the note at the top of this file). -->
-        <div class="reel" data-src="pdrn-mist-showcase.mp4" data-poster="pdrn-mist-showcase.jpg" data-label="Hydrating mist, product only" style="--tint:var(--blush);--on:var(--ink)">
-          <span class="reel__bar"></span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
-          <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
-        </div>
-        <div class="reel" data-src="night-mask-showcase.mp4" data-poster="night-mask-showcase.jpg" data-label="Overnight mask, product only" style="--tint:var(--jade);--on:var(--pearl)">
-          <span class="reel__bar"></span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
-          <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
-        </div>
-        <div class="reel" data-src="lip-balm-showcase.mp4" data-poster="lip-balm-showcase.jpg" data-label="Lip balm, product only" style="--tint:var(--gloss);--on:var(--ink)">
-          <span class="reel__bar"></span><span class="reel__play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 3.5v17l14-8.5z"/></svg></span><span class="reel__lines"><i></i><i></i></span>
-          <span class="reel__sound" aria-hidden="true"><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></span>
-        </div>
+      <div class="orbit" aria-label="Sample videos, turning carousel">
+        <!-- Filled automatically from the Sample work cards below, alternating Real reactions and Product only.
+             To add a video, fill data-src on the matching card in Sample work; the orbit picks it up. -->
+        <div class="orbit__stage"><div class="orbit__ring"></div></div>
       </div>
     </div>
   </section>
@@ -659,6 +660,108 @@
     swipeProgress();
   }
 
+  /* ---------- Hero orbit: cards from Sample work, alternating Real reactions / Product only, turning slowly ---------- */
+  (function(){
+    var orbit = document.querySelector('.orbit');
+    var ring = orbit && orbit.querySelector('.orbit__ring');
+    if(!ring) return;
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.wall .card'));
+    var people = cards.filter(function(c){ return c.getAttribute('data-type') === 'people'; });
+    var product = cards.filter(function(c){ return c.getAttribute('data-type') === 'product'; });
+    var order = [];
+    for(var k = 0; k < Math.max(people.length, product.length); k++){
+      if(people[k]) order.push(people[k]);
+      if(product[k]) order.push(product[k]);
+    }
+    var items = order.map(function(card){
+      var reel = card.querySelector('.reel').cloneNode(true);
+      var src = (reel.getAttribute('data-src') || '').trim();
+      reel.removeAttribute('data-src');
+      var item = document.createElement('div');
+      item.className = 'orbit__item' + (card.classList.contains('is-soon') ? ' is-soon' : '');
+      item.setAttribute('aria-hidden', 'true');
+      item.appendChild(reel);
+      var veil = document.createElement('span'); veil.className = 'orbit__veil'; item.appendChild(veil);
+      var v = null;
+      if(src){
+        v = document.createElement('video');
+        v.src = src; v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'metadata';
+        var poster = reel.getAttribute('data-poster'); if(poster) v.poster = poster;
+        v.setAttribute('aria-hidden', 'true');
+        reel.insertBefore(v, reel.firstChild);
+        reel.classList.add('has-video');
+      }
+      item.addEventListener('click', function(){
+        var w = document.getElementById('work');
+        if(w) w.scrollIntoView({behavior: reduce ? 'auto' : 'smooth'});
+      });
+      ring.appendChild(item);
+      return {el:item, veil:veil, video:v, playing:false};
+    });
+    var n = items.length; if(!n) return;
+
+    var cw = 190, radius = 220;
+    function size(){
+      var w = orbit.clientWidth || 500;
+      cw = w < 520 ? Math.min(170, w / 2.45) : Math.max(150, Math.min(210, w / 3.1));
+      radius = cw * (w < 520 ? 0.95 : 1.2);
+      orbit.style.setProperty('--cw', cw + 'px');
+    }
+    size();
+    window.addEventListener('resize', function(){ size(); place(); });
+
+    var angle = 0;                       /* radians, grows over time */
+    var SPEED = (Math.PI * 2) / 42;      /* one full turn every 42 s */
+    var speedNow = SPEED;
+    var hovering = false;
+
+    function place(){
+      for(var i = 0; i < n; i++){
+        var a = angle + i * (Math.PI * 2 / n);
+        var s = Math.sin(a), c = Math.cos(a);
+        var depth = (c + 1) / 2;         /* 1 = front, 0 = back */
+        var it = items[i];
+        it.el.style.transform = 'translate3d(' + (s * radius).toFixed(1) + 'px,0,' + ((c - 1) * radius).toFixed(1) + 'px) rotateY(' + (s * -28).toFixed(1) + 'deg)';
+        it.veil.style.opacity = (0.75 * (1 - depth) * (1 - depth) + 0.12 * (1 - depth)).toFixed(3);  /* fades into the page, stays opaque so cards never show through each other */
+        it.el.style.zIndex = Math.round(depth * 100);
+        var front = c > 0.82;
+        if(it.video){
+          if(front && !it.playing && visible && !reduce){ it.playing = true; it.video.play().catch(function(){}); }
+          else if((!front || !visible) && it.playing){ it.playing = false; it.video.pause(); }
+        }
+      }
+    }
+
+    var visible = true, last = 0, raf = 0;
+    function tick(t){
+      if(!last) last = t;
+      var dt = Math.min(0.05, (t - last) / 1000); last = t;
+      var target = hovering ? SPEED * 0.25 : SPEED;  /* slows down, never stops */
+      speedNow += (target - speedNow) * Math.min(1, dt * 3);
+      angle -= speedNow * dt;
+      place();
+      raf = visible ? requestAnimationFrame(tick) : 0;
+    }
+    function start(){ if(!raf && !reduce){ last = 0; raf = requestAnimationFrame(tick); } }
+
+    orbit.addEventListener('mouseenter', function(){ hovering = true; });
+    orbit.addEventListener('mouseleave', function(){ hovering = false; });
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        visible = es[0].isIntersecting && !document.hidden;
+        if(visible) start(); else place();
+      }).observe(orbit);
+    }
+    document.addEventListener('visibilitychange', function(){
+      visible = !document.hidden; if(visible) start(); else place();
+    });
+
+    if(reduce) angle = 0.25;             /* still picture, slightly turned so the ring reads as 3D */
+    place();
+    orbit.classList.add('is-live');
+    start();
+  })();
+
   /* ---------- Real videos: any .reel with a data-src becomes a playable video ---------- */
   var reels = Array.prototype.filter.call(document.querySelectorAll('.reel[data-src]'), function(r){
     return r.getAttribute('data-src').trim() !== '';
@@ -730,17 +833,9 @@
       gsap.timeline({defaults:{ease:'power3.out'}})
         .from(heroWords, {yPercent:115, duration:.95, stagger:.07}, 0)
         .from('.hero__copy > :not(h1)', {y:26, opacity:0, duration:.8, stagger:.1}, .4)
-        .from('.hero__reels .reel', {y:90, opacity:0, rotate:3, duration:1.1, stagger:.13}, .2);
+        .from('.orbit', {y:60, opacity:0, scale:.94, duration:1.2}, .2);
 
       mm = gsap.matchMedia();
-
-      /* Large screens: hero videos drift at different speeds while you scroll */
-      mm.add('(min-width:1000px)', function(){
-        gsap.utils.toArray('.hero__reels .reel').forEach(function(r, i){
-          gsap.to(r, {yPercent:[-5,-13,-8][i] || -6, ease:'none',
-            scrollTrigger:{trigger:'.hero', start:'top top', end:'bottom top', scrub:true}});
-        });
-      });
 
       /* Large screens: sample work becomes a pinned strip that moves sideways as you scroll */
       mm.add('(min-width:1000px) and (min-height:620px)', function(){
@@ -836,7 +931,7 @@
     } catch(err){
       /* Anything goes wrong: show the plain page */
       try{ if(mm) mm.revert(); ScrollTrigger.getAll().forEach(function(t){ t.kill(); }); gsap.killTweensOf('*'); }catch(e2){}
-      document.querySelectorAll('[data-reveal],.steps li,.hero__copy > *,.hero__reels .reel,.wi,.scroll-progress').forEach(function(n){ n.style.cssText = ''; });
+      document.querySelectorAll('[data-reveal],.steps li,.hero__copy > *,.orbit,.wi,.scroll-progress').forEach(function(n){ n.style.cssText = ''; });
       root.classList.remove('motion-ok','pin-strip','m-pending');
       if(window.console) console.warn('Lumella motion disabled:', err);
     }
