@@ -823,20 +823,6 @@
       }
     }
 
-    /* Ring leans toward the mouse (laptops and desktops only) */
-    var canTilt = !reduce && window.matchMedia && matchMedia('(hover:hover) and (pointer:fine)').matches;
-    var tiltX = 0, tiltY = 0, tX = 0, tY = 0;
-    if(canTilt){
-      var heroEl = document.querySelector('.hero');
-      heroEl.addEventListener('mousemove', function(e){
-        var b = orbit.getBoundingClientRect();
-        var nx = (e.clientX - (b.left + b.width / 2)) / (window.innerWidth / 2);
-        var ny = (e.clientY - (b.top + b.height / 2)) / (window.innerHeight / 2);
-        tY = Math.max(-1, Math.min(1, nx)) * 14;            /* degrees */
-        tX = Math.max(-1, Math.min(1, ny)) * -10;
-      });
-      heroEl.addEventListener('mouseleave', function(){ tX = 0; tY = 0; });
-    }
 
     var cw = 190, radius = 220;
     function size(){
@@ -857,10 +843,6 @@
 
     function place(){
       var weights = [];
-      if(canTilt){
-        tiltX += (tX - tiltX) * 0.08; tiltY += (tY - tiltY) * 0.08;
-        ring.style.transform = 'translateZ(' + (-radius) + 'px) rotateX(' + tiltX.toFixed(2) + 'deg) rotateY(' + tiltY.toFixed(2) + 'deg) translateZ(' + radius + 'px)';
-      }
       for(var i = 0; i < n; i++){
         var a = angle + i * (Math.PI * 2 / n);
         var s = Math.sin(a), c = Math.cos(a);
