@@ -185,13 +185,16 @@
   .orbit__stage{position:absolute;inset:0;perspective:1000px;perspective-origin:50% 45%;}
   .orbit__ring{position:absolute;left:50%;top:50%;transform-style:preserve-3d;}
   .orbit__item{position:absolute;left:0;top:0;width:var(--cw);margin:calc(var(--ch) / -2) 0 0 calc(var(--cw) / -2);
-    will-change:transform,opacity;cursor:pointer;}
+    will-change:transform,opacity;}
   .orbit__item .reel{box-shadow:0 18px 40px -18px rgba(43,13,27,.45);}
   .orbit__veil{position:absolute;inset:0;z-index:5;border-radius:22px;background:var(--pearl);pointer-events:none;opacity:0;}
   .orbit .reel__tag{font-size:.68rem;}
   .orbit .is-soon .reel::after{font-size:.72rem;padding:5px 12px;}
   .orbit .reel__sound{display:none !important;}
-  .orbit .reel.has-video .reel__tag{display:block;}
+  .orbit .reel__tag{display:none !important;}
+  .orbit{touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;}
+  .orbit.is-dragging{cursor:grabbing;}
+  .orbit video{pointer-events:none;}
   .orbit .reel__bar::after{animation:none !important;}
   .orbit:not(.is-live) .orbit__item{opacity:0;}
   html.m-pending .hero__copy > *,html.m-pending .orbit{opacity:0;}
@@ -722,10 +725,6 @@
         reel.insertBefore(v, reel.firstChild);
         reel.classList.add('has-video');
       }
-      item.addEventListener('click', function(){
-        var w = document.getElementById('work');
-        if(w) w.scrollIntoView({behavior: reduce ? 'auto' : 'smooth'});
-      });
       ring.appendChild(item);
       return {el:item, veil:veil, video:v, playing:false};
     });
@@ -741,10 +740,12 @@
     size();
     window.addEventListener('resize', function(){ size(); place(); });
 
-    var angle = 0;                       /* radians, grows over time */
+    var angle = 0;                       /* radians */
     var SPEED = (Math.PI * 2) / 42;      /* one full turn every 42 s */
+    var dir = 1;                         /* 1 = default direction, -1 = reversed by a throw */
     var speedNow = SPEED;
     var hovering = false;
+    var dragging = false, dragMoved = false, dragX = 0, dragT = 0, dragVel = 0, dragDist = 0;
 
     function place(){
       for(var i = 0; i < n; i++){
@@ -767,13 +768,58 @@
     function tick(t){
       if(!last) last = t;
       var dt = Math.min(0.05, (t - last) / 1000); last = t;
-      var target = hovering ? SPEED * 0.25 : SPEED;  /* slows down, never stops */
-      speedNow += (target - speedNow) * Math.min(1, dt * 3);
-      angle -= speedNow * dt;
+      if(!dragging){
+        var target = dir * (hovering ? SPEED * 0.25 : SPEED);  /* slows on hover, never stops */
+        speedNow += (target - speedNow) * Math.min(1, dt * 1.6); /* a throw glides back to cruising speed */
+        angle -= speedNow * dt;
+      }
       place();
       raf = visible ? requestAnimationFrame(tick) : 0;
     }
     function start(){ if(!raf && !reduce){ last = 0; raf = requestAnimationFrame(tick); } }
+
+    /* Drag or swipe sideways to spin it; on release it keeps the momentum, then settles back to its slow turn */
+    orbit.addEventListener('pointerdown', function(e){
+      if(e.pointerType === 'mouse' && e.button !== 0) return;
+      dragging = true; dragMoved = false; dragDist = 0; dragX = e.clientX; dragT = performance.now(); dragVel = 0;
+      orbit.classList.add('is-dragging');
+      if(orbit.setPointerCapture) try{ orbit.setPointerCapture(e.pointerId); }catch(_){}
+    });
+    orbit.addEventListener('pointermove', function(e){
+      if(!dragging) return;
+      var now = performance.now();
+      var dx = e.clientX - dragX;
+      if(Math.abs(dx) > 0){
+        dragDist += Math.abs(dx); if(dragDist > 6) dragMoved = true;
+        var da = dx / radius;            /* card under the finger follows it */
+        angle += da;
+        var dt = Math.max(8, now - dragT) / 1000;
+        dragVel = dragVel * 0.6 + (-da / dt) * 0.4;   /* smoothed, in the same units as speedNow */
+        dragX = e.clientX; dragT = now;
+        place();
+      }
+    });
+    function endDrag(){
+      if(!dragging) return;
+      dragging = false;
+      orbit.classList.remove('is-dragging');
+      if(performance.now() - dragT > 120) dragVel = 0;   /* held still before letting go: no throw */
+      var MAX = SPEED * 30;
+      speedNow = Math.max(-MAX, Math.min(MAX, dragVel));
+      if(Math.abs(speedNow) > SPEED * 0.5) dir = speedNow > 0 ? 1 : -1;   /* keep turning the way it was thrown */
+      setTimeout(function(){ dragMoved = false; }, 80);
+      start();
+    }
+    orbit.addEventListener('pointerup', endDrag);
+    orbit.addEventListener('pointercancel', endDrag);
+    orbit.addEventListener('lostpointercapture', endDrag);
+    /* A tap (not a drag) takes you to the full sample work */
+    orbit.addEventListener('click', function(){
+      if(dragMoved) return;
+      var w = document.getElementById('work');
+      if(w) w.scrollIntoView({behavior: reduce ? 'auto' : 'smooth'});
+    });
+    orbit.addEventListener('dragstart', function(e){ e.preventDefault(); });
 
     orbit.addEventListener('mouseenter', function(){ hovering = true; });
     orbit.addEventListener('mouseleave', function(){ hovering = false; });
